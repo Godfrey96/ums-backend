@@ -30,15 +30,13 @@ public class SecurityConfiguration {
                 .anyRequest()
                 .authenticated()
                 .and()
-                .headers().frameOptions().sameOrigin()
-                .and()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
 
-//        http.headers().frameOptions().sameOrigin();
+        http.headers().frameOptions().sameOrigin();
         return http.build();
     }
 
