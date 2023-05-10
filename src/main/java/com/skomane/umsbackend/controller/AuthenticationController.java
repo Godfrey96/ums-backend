@@ -1,6 +1,5 @@
 package com.skomane.umsbackend.controller;
 
-import com.skomane.umsbackend.dto.AuthenticationRequest;
 import com.skomane.umsbackend.dto.AuthenticationResponse;
 import com.skomane.umsbackend.dto.RegisterRequest;
 import com.skomane.umsbackend.exceptions.EmailAlreadyTakenException;
@@ -18,6 +17,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@CrossOrigin("*")
 @RequiredArgsConstructor
 public class AuthenticationController {
 
