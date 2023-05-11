@@ -29,7 +29,14 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
                     auth.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll();
-                    auth.requestMatchers("/swagger-ui/**", "/umsapi-openapi/**").permitAll();
+                    auth.requestMatchers(
+                            "/v2/api-docs",
+                            "/configuration/ui",
+                            "/swagger-resources/**",
+                            "/configuration/security",
+                            "/swagger-ui.html",
+                            "/webjars/**"
+                    ).permitAll();
                     auth.anyRequest().authenticated();
                 });
         http.headers().frameOptions().sameOrigin();
