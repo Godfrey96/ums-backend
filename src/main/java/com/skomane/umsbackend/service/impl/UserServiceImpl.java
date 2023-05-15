@@ -46,6 +46,28 @@ public class UserServiceImpl implements UserService {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @Override
+    public User getSingleUser() {
+        try {
+            if (authenticationFilter.getCurrentUser() != null){
+                var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+                if (user!= null) {
+                    user.get().getEmail();
+                    user.get().getPhone();
+                    user.get().getMyUsername();
+                    return user.get();
+                } else {
+                    throw new UserDoesNotExistException();
+                }
+            }
+//            var user = userRepository.findByEmail(requestMap.get("email"));
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        throw new UserDoesNotExistException();
+    }
+
 
     @Override
     public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {

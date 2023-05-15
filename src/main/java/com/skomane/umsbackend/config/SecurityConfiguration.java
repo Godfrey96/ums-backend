@@ -4,6 +4,7 @@ import com.skomane.umsbackend.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -24,6 +25,15 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+//        http.cors().configurationSource(c -> {
+//                    CorsConfiguration corsConfig = new CorsConfiguration();
+//                    corsConfig.addAllowedOriginPattern("*");
+//                    corsConfig.addAllowedMethod(HttpMethod.POST);
+//                    corsConfig.addAllowedMethod(HttpMethod.PUT);
+//                    corsConfig.addAllowedMethod(HttpMethod.DELETE);
+//                    corsConfig.addAllowedMethod(HttpMethod.GET);
+//                    return corsConfig;
+//                })
                 .and()
                 .csrf().disable()
                 .authorizeHttpRequests(auth -> {

@@ -8,6 +8,7 @@ import com.skomane.umsbackend.exceptions.EmailAlreadyTakenException;
 import com.skomane.umsbackend.exceptions.ErrorResponseException;
 import com.skomane.umsbackend.exceptions.InvalidCredentialsException;
 import com.skomane.umsbackend.exceptions.UserDoesNotExistException;
+import com.skomane.umsbackend.jwt.JwtAuthenticationFilter;
 import com.skomane.umsbackend.jwt.JwtUtils;
 import com.skomane.umsbackend.model.Role;
 import com.skomane.umsbackend.model.User;
@@ -36,6 +37,7 @@ public class AuthServiceImpl implements AuthService {
     private final JwtUtils jwtUtils;
     private final AuthenticationManager authenticationManager;
     private final UserDetailsServiceImpl userDetailsService;
+    private final JwtAuthenticationFilter authenticationFilter;
 
 
     @Override
@@ -88,5 +90,6 @@ public class AuthServiceImpl implements AuthService {
         return userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new UserDoesNotExistException());
     }
+
 
 }
