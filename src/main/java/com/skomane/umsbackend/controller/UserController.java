@@ -30,6 +30,11 @@ public class UserController {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
+    @GetMapping("/get-user")
+    public ResponseEntity<User> getSingleUser() {
+        return new ResponseEntity<>(userService.getSingleUser(), HttpStatus.OK);
+    }
+
     @GetMapping("/get-users-only")
     public ResponseEntity<List<User>> getUsersOnly() {
         try {
@@ -40,7 +45,7 @@ public class UserController {
         return new ResponseEntity<>(new ArrayList<>(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteUser(@PathVariable Integer id) {
         try {
             return userService.deleteUser(id);

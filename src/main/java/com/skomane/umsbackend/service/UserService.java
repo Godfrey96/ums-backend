@@ -11,6 +11,7 @@ public interface UserService {
 
     ResponseEntity<List<User>> getAllUsers();
     ResponseEntity<List<User>> getAllUsersOfRoleUser(Role role);
+    User getSingleUser();
     ResponseEntity<String> updateStatus(Map<String, String> requestMap);
     ResponseEntity<String> changePassword(Map<String, String> requestMap);
     ResponseEntity<String> deleteUser(Integer id);
