@@ -65,7 +65,7 @@ public class UserController {
         return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/update-status")
+    @PutMapping("/update-status")
     public ResponseEntity<String> updateStatus(@RequestBody Map<String, String> requestMap) {
         try {
             return userService.updateStatus(requestMap);
