@@ -60,7 +60,6 @@ public class UserServiceImpl implements UserService {
                     throw new UserDoesNotExistException();
                 }
             }
-//            var user = userRepository.findByEmail(requestMap.get("email"));
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -72,17 +71,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
         try {
-//            var user = userRepository.findByEmail(requestMap.get("email"));
             Optional<User> optional = userRepository.findById(Integer.parseInt(requestMap.get("id")));
             if (!optional.isEmpty()) {
                 optional.get().setStatus(requestMap.get("status"));
-//                if (!user.equals(null)) {
-//                user.get().setStatus(requestMap.get("status"));
-//                if (requestMap.get("status").equalsIgnoreCase("true")){
-//                    user.get().setStatus("false");
-//                } else if (requestMap.get("status").equalsIgnoreCase("false")){
-//                    user.get().setStatus("true");
-//                }
                 userRepository.save(optional.get());
                 return new ResponseEntity<>("Status updated successfully", HttpStatus.OK);
             } else {

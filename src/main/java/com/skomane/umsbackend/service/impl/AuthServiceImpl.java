@@ -4,10 +4,7 @@ import com.skomane.umsbackend.config.ApplicationConfig;
 import com.skomane.umsbackend.dto.AuthenticationRequest;
 import com.skomane.umsbackend.dto.AuthenticationResponse;
 import com.skomane.umsbackend.dto.RegisterRequest;
-import com.skomane.umsbackend.exceptions.EmailAlreadyTakenException;
-import com.skomane.umsbackend.exceptions.ErrorResponseException;
-import com.skomane.umsbackend.exceptions.InvalidCredentialsException;
-import com.skomane.umsbackend.exceptions.UserDoesNotExistException;
+import com.skomane.umsbackend.exceptions.*;
 import com.skomane.umsbackend.jwt.JwtAuthenticationFilter;
 import com.skomane.umsbackend.jwt.JwtUtils;
 import com.skomane.umsbackend.model.Role;
@@ -72,7 +69,8 @@ public class AuthServiceImpl implements AuthService {
                     String jwtToken = jwtUtils.generateToken(email,user.getRole().name());
                     return new AuthenticationResponse(user, jwtToken);
                 } else {
-                    return new AuthenticationResponse(null, "Your Account is Disabled. Wait for an Admin to activate");
+                    throw new DisabledAccountException();
+//                    return new AuthenticationResponse(null, "Your Account is Disabled. Wait for an Admin to activate");
                 }
             }
 
