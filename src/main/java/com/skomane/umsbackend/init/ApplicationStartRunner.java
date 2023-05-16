@@ -26,5 +26,25 @@ public class ApplicationStartRunner implements CommandLineRunner {
                 .status("true")
                 .build();
         userRepository.save(user);
+
+        User user1 = new User().builder()
+                .myUsername("mogau")
+                .phone("0720461090")
+                .email("mogau@gmail.com")
+                .password(passwordEncoder.encode("123456789"))
+                .role(Role.USER)
+                .status("true")
+                .build();
+        userRepository.save(user1);
+
+        User user2 = new User().builder()
+                .myUsername("skomane")
+                .phone("0720461090")
+                .email("skomane@gmail.com")
+                .password(passwordEncoder.encode("123456789"))
+                .role(Role.USER)
+                .status("false")
+                .build();
+        userRepository.save(user2);
     }
 }
