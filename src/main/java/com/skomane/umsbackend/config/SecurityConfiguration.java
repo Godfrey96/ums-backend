@@ -24,7 +24,7 @@ public class SecurityConfiguration {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
+//        http.cors().configurationSource(request -> new CorsConfiguration().applyPermitDefaultValues())
 //        http.cors().configurationSource(c -> {
 //                    CorsConfiguration corsConfig = new CorsConfiguration();
 //                    corsConfig.addAllowedOriginPattern("*");
@@ -34,8 +34,9 @@ public class SecurityConfiguration {
 //                    corsConfig.addAllowedMethod(HttpMethod.GET);
 //                    return corsConfig;
 //                })
-                .and()
-                .csrf().disable()
+                http.cors();
+//                        .and()
+                http.csrf().disable()
                 .authorizeHttpRequests(auth -> {
                     auth.requestMatchers("/api/v1/auth/**").permitAll();
                     auth.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll();
