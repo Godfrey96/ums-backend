@@ -140,14 +140,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserByAdmin(User user, Integer id) {
+    public User updateUserDetailsByAdmin(User user) {
         try {
-            User existingUser = userRepository.findById(id)
+            User existingUser = userRepository.findByEmail(user.getEmail())
                     .orElseThrow(() -> new UserDoesNotExistException());
             existingUser.setMyUsername(user.getMyUsername());
             existingUser.setPhone(user.getPhone());
             existingUser.setEmail(user.getEmail());
-            existingUser.setStatus(user.getStatus());
             existingUser.setRole(user.getRole());
 
             userRepository.save(existingUser);

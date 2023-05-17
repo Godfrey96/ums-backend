@@ -16,7 +16,7 @@ public interface UserService {
     ResponseEntity<String> changePassword(Map<String, String> requestMap);
     ResponseEntity<String> deleteUser(Integer id);
     ResponseEntity<String> updateUser(Map<String, String> requestMap);
-    User updateUserByAdmin(User user, Integer id);
+    User updateUserDetailsByAdmin(User user);
     User getUserById(Integer id);
 
 }

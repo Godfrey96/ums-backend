@@ -85,9 +85,9 @@ public class UserController {
         return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PutMapping("/updateUser/{id}")
-    public ResponseEntity<User> updateUserByAdmin(@PathVariable Integer id, @RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUserByAdmin(user, id), HttpStatus.OK);
+    @PutMapping("/update-user-details")
+    public ResponseEntity<User> updateUserDetailsByAdmin(@RequestBody User user) {
+        return new ResponseEntity<>(userService.updateUserDetailsByAdmin(user), HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")
