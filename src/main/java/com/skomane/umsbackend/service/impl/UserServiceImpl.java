@@ -158,4 +158,10 @@ public class UserServiceImpl implements UserService {
         }
         return new User();
     }
+
+    @Override
+    public User getUserById(Integer id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new UserDoesNotExistException());
+    }
 }

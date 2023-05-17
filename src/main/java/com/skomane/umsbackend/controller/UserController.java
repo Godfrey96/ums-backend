@@ -90,5 +90,10 @@ public class UserController {
         return new ResponseEntity<>(userService.updateUserByAdmin(user, id), HttpStatus.OK);
     }
 
+    @GetMapping("/get/{id}")
+    public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
+        return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
+
 
 }
