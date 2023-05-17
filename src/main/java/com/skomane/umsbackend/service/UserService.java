@@ -17,5 +17,6 @@ public interface UserService {
     ResponseEntity<String> deleteUser(Integer id);
     ResponseEntity<String> updateUser(Map<String, String> requestMap);
     User updateUserByAdmin(User user, Integer id);
+    User getUserById(Integer id);
 
 }
