@@ -14,6 +14,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Collection;
 import java.util.List;
 
+//@NamedQuery(name = "User.totalAdmins", query = "select count(u) from User u")
+
 @Data
 @Builder
 @AllArgsConstructor

@@ -110,5 +110,25 @@ public class UserController {
         return userService.setProfileOrBannerPicture(file, "bnr");
     }
 
+    @GetMapping("/total-admins")
+    public Integer getAllAdminsCount() {
+        return userService.getAllAdminsCountByAdminRole();
+    }
+
+    @GetMapping("/total-users")
+    public Integer getAllUsersCount() {
+        return userService.getAllUsersCountByUserRole();
+    }
+
+    @GetMapping("/total-active")
+    public Integer getAllUsersStatusTrue() {
+        return userService.getAllUsersCountByStatusTrue();
+    }
+
+    @GetMapping("/total-disable")
+    public Integer getAllUsersStatusFalse() {
+        return userService.getAllUsersCountByStatusFalse();
+    }
+
 
 }

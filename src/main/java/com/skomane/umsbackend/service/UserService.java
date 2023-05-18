@@ -21,5 +21,10 @@ public interface UserService {
     User getUserById(Integer id);
     User getUsernameByEmail(String username);
     User setProfileOrBannerPicture(MultipartFile file, String prefix);
+    Integer getAllAdminsCountByAdminRole();
+    Integer getAllUsersCountByUserRole();
+    Integer getAllUsersCountByStatusTrue();
+    Integer getAllUsersCountByStatusFalse();
+
 
 }
