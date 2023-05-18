@@ -23,7 +23,7 @@ public class ImageService {
     private final ImageRepository imageRepository;
 
     private static final File DIRECTORY = new File(defaultPath + "/img");
-    private static final String URL = "http:://localhost:8081/images/";
+    private static final String URL = "http://localhost:8081/images/";
 
     public Image uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
         try {

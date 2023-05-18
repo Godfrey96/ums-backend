@@ -197,12 +197,6 @@ public class UserServiceImpl implements UserService {
                     Files.deleteIfExists(p);
                 }
                 user.get().setProfilePicture(photo);
-            } else {
-//                if (user.getBannerPicture() != null && !user.getBannerPicture().getImageName().equals("defaultbnr.png")) {
-//                    Path p = Paths.get(user.getBannerPicture().getImagePath());
-//                    Files.deleteIfExists(p);
-//                }
-                user.get().setBannerPicture(photo);
             }
         } catch (Exception e){
             throw new UnableToResolvePhotoException();
