@@ -183,9 +183,6 @@ public class UserServiceImpl implements UserService {
     public User setProfileOrBannerPicture(MultipartFile file, String prefix) throws UnableToResolvePhotoException {
         var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
 
-//        User user = userRepository.findByEmail(userEmail)
-//                        .orElseThrow(() -> new UserDoesNotExistException());
-
         System.out.println("user-profile: " + user);
 
         Image photo = imageService.uploadImage(file, prefix);
@@ -203,5 +200,25 @@ public class UserServiceImpl implements UserService {
         }
 
         return userRepository.save(user.get());
+    }
+
+    @Override
+    public Integer getAllAdminsCountByAdminRole() {
+        return userRepository.totalAdminByAdminRole();
+    }
+
+    @Override
+    public Integer getAllUsersCountByUserRole() {
+        return userRepository.totalUsersByUserRole();
+    }
+
+    @Override
+    public Integer getAllUsersCountByStatusTrue() {
+        return userRepository.totalUsersByStatusTrue();
+    }
+
+    @Override
+    public Integer getAllUsersCountByStatusFalse() {
+        return userRepository.totalUsersByStatusFalse();
     }
 }
