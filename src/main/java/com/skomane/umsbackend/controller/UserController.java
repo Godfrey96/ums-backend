@@ -80,7 +80,7 @@ public class UserController {
         return new ResponseEntity<>("Something went wrong", HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
-    @PostMapping("/update-user")
+    @PutMapping("/update-user")
     public ResponseEntity<String> updateUser(@RequestBody Map<String, String> requestMap) {
         try {
             return userService.updateUser(requestMap);
@@ -101,7 +101,7 @@ public class UserController {
     }
 
     @PostMapping("/pfp")
-    public User uploadProfilePicture(@RequestParam("image")MultipartFile file) throws Exception {
+    public User uploadProfilePicture(@RequestParam("image") MultipartFile file) throws Exception {
         return userService.setProfileOrBannerPicture(file, "pfp");
     }
 
