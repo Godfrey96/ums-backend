@@ -28,7 +28,7 @@ public class ImageService {
     public Image uploadImage(MultipartFile file, String prefix) throws UnableToSavePhotoException {
         try {
             String extension = "." + file.getContentType().split("/")[1];
-            File img = File.createTempFile(prefix + extension, String.valueOf(DIRECTORY));
+            File img = File.createTempFile(prefix, extension, DIRECTORY);
             file.transferTo(img);
             String imageURL = URL + img.getName();
             Image i = new Image(img.getName(), file.getContentType(), img.getPath(), imageURL);

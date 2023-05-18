@@ -3,16 +3,19 @@ package com.skomane.umsbackend.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Setter
 @Entity
 @Table(name = "images")
+@NoArgsConstructor
 public class Image {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "image_id")
     private Integer imageId;
 
     @Column(name = "image_name", unique = true)

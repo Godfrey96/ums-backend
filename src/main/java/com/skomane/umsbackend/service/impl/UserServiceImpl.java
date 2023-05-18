@@ -1,17 +1,25 @@
 package com.skomane.umsbackend.service.impl;
 
+import com.skomane.umsbackend.exceptions.UnableToResolvePhotoException;
 import com.skomane.umsbackend.exceptions.UserDoesNotExistException;
 import com.skomane.umsbackend.jwt.JwtAuthenticationFilter;
+import com.skomane.umsbackend.model.Image;
 import com.skomane.umsbackend.model.Role;
 import com.skomane.umsbackend.model.User;
 import com.skomane.umsbackend.repository.UserRepository;
+import com.skomane.umsbackend.service.ImageService;
 import com.skomane.umsbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +32,7 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtAuthenticationFilter authenticationFilter;
+    private final ImageService imageService;
 
 
     @Override
@@ -162,5 +171,43 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Integer id) {
         return userRepository.findById(id)
                 .orElseThrow(() -> new UserDoesNotExistException());
+    }
+
+    @Override
+    public User getUsernameByEmail(String username) {
+        return userRepository.findByEmail(username)
+                .orElseThrow(() -> new UserDoesNotExistException());
+    }
+
+    @Override
+    public User setProfileOrBannerPicture(MultipartFile file, String prefix) throws UnableToResolvePhotoException {
+        var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+
+//        User user = userRepository.findByEmail(userEmail)
+//                        .orElseThrow(() -> new UserDoesNotExistException());
+
+        System.out.println("user-profile: " + user);
+
+        Image photo = imageService.uploadImage(file, prefix);
+
+        try {
+            if (prefix.equals("pfp")) {
+                if (user.get().getProfilePicture() != null && !user.get().getProfilePicture().getImageName().equals("defaultpfp.png")) {
+                    Path p = Paths.get(user.get().getProfilePicture().getImagePath());
+                    Files.deleteIfExists(p);
+                }
+                user.get().setProfilePicture(photo);
+            } else {
+//                if (user.getBannerPicture() != null && !user.getBannerPicture().getImageName().equals("defaultbnr.png")) {
+//                    Path p = Paths.get(user.getBannerPicture().getImagePath());
+//                    Files.deleteIfExists(p);
+//                }
+                user.get().setBannerPicture(photo);
+            }
+        } catch (Exception e){
+            throw new UnableToResolvePhotoException();
+        }
+
+        return userRepository.save(user.get());
     }
 }

@@ -1,10 +1,12 @@
 package com.skomane.umsbackend.jwt;
 
+import io.jsonwebtoken.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.security.oauth2.resource.OAuth2ResourceServerProperties;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -57,4 +59,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     public String getCurrentUser() {
         return userEmail;
     }
+
+
 }
