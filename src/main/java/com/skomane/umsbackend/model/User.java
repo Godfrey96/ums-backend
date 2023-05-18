@@ -45,6 +45,18 @@ public class User implements UserDetails {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "profile_picture",
+            referencedColumnName = "image_id")
+    private Image profilePicture;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(
+            name = "banner_picture",
+            referencedColumnName = "image_id")
+    private Image bannerPicture;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of(new SimpleGrantedAuthority(role.name()));

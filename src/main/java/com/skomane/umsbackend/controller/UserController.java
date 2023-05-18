@@ -1,12 +1,16 @@
 package com.skomane.umsbackend.controller;
 
+import com.skomane.umsbackend.exceptions.UnableToResolvePhotoException;
+import com.skomane.umsbackend.jwt.JwtUtils;
 import com.skomane.umsbackend.model.Role;
 import com.skomane.umsbackend.model.User;
 import com.skomane.umsbackend.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,7 @@ import java.util.Map;
 public class UserController {
 
     private final UserService userService;
+    private final JwtUtils jwtUtils;
 
     @GetMapping("/get-all-users")
     public ResponseEntity<List<User>> getAllUsers() {
@@ -93,6 +98,16 @@ public class UserController {
     @GetMapping("/get/{id}")
     public ResponseEntity<User> getUserById(@PathVariable("id") Integer id) {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
+    }
+
+    @PostMapping("/pfp")
+    public User uploadProfilePicture(@RequestParam("image")MultipartFile file) throws Exception {
+        return userService.setProfileOrBannerPicture(file, "pfp");
+    }
+
+    @PostMapping("/banner")
+    public User uploadBannerPicture(@RequestParam("image")MultipartFile file) throws Exception {
+        return userService.setProfileOrBannerPicture(file, "bnr");
     }
 
 
