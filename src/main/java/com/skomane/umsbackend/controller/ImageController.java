@@ -3,6 +3,7 @@ package com.skomane.umsbackend.controller;
 import com.skomane.umsbackend.exceptions.UnableToResolvePhotoException;
 import com.skomane.umsbackend.exceptions.UnableToSavePhotoException;
 import com.skomane.umsbackend.service.ImageService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/images")
 @CrossOrigin("*")
+@Tag(name = "Image")
 public class ImageController {
 
     private final ImageService imageService;

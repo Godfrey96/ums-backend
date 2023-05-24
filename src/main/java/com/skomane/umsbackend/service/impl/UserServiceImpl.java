@@ -1,5 +1,6 @@
 package com.skomane.umsbackend.service.impl;
 
+import com.skomane.umsbackend.dto.*;
 import com.skomane.umsbackend.exceptions.UnableToResolvePhotoException;
 import com.skomane.umsbackend.exceptions.UserDoesNotExistException;
 import com.skomane.umsbackend.jwt.JwtAuthenticationFilter;
@@ -78,11 +79,11 @@ public class UserServiceImpl implements UserService {
 
 
     @Override
-    public ResponseEntity<String> updateStatus(Map<String, String> requestMap) {
+    public ResponseEntity<String> updateStatus(StatusDto statusDto) {
         try {
-            Optional<User> optional = userRepository.findById(Integer.parseInt(requestMap.get("id")));
+            Optional<User> optional = userRepository.findById(statusDto.getId());
             if (!optional.isEmpty()) {
-                optional.get().setStatus(requestMap.get("status"));
+                optional.get().setStatus(statusDto.getStatus());
                 userRepository.save(optional.get());
                 return new ResponseEntity<>("Status updated successfully", HttpStatus.OK);
             } else {
@@ -95,12 +96,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> changePassword(Map<String, String> requestMap) {
+    public ResponseEntity<String> changePassword(PasswordChangeDto passwordChangeDto) {
         try {
             var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
             if (!user.equals(null)) {
-                if (passwordEncoder.matches(requestMap.get("oldPassword"), user.get().getPassword())) {
-                    user.get().setPassword(passwordEncoder.encode(requestMap.get("newPassword")));
+                if (passwordEncoder.matches(passwordChangeDto.getOldPassword(), user.get().getPassword())) {
+                    user.get().setPassword(passwordEncoder.encode(passwordChangeDto.getNewPassword()));
                     userRepository.save(user.get());
                     return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
                 } else {
@@ -130,13 +131,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseEntity<String> updateUser(Map<String, String> requestMap) {
+    public ResponseEntity<String> updateUser(UpdateUserDto userDto) {
         try {
             var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
             if (!user.equals(null)) {
-                user.get().setMyUsername(requestMap.get("myUsername"));
-                user.get().setPhone(requestMap.get("phone"));
-                user.get().setEmail(requestMap.get("email"));
+                user.get().setMyUsername(userDto.getMyUsername());
+                user.get().setPhone(userDto.getPhone());
+                user.get().setEmail(userDto.getEmail());
                 userRepository.save(user.get());
                 return new ResponseEntity<>("Your details are updated successfully", HttpStatus.OK);
             } else {
@@ -149,14 +150,14 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User updateUserDetailsByAdmin(User user) {
+    public User updateUserDetailsByAdmin(UpdateUserAdminDto updateUserAdminDto) {
         try {
-            User existingUser = userRepository.findByEmail(user.getEmail())
+            User existingUser = userRepository.findByEmail(updateUserAdminDto.getEmail())
                     .orElseThrow(() -> new UserDoesNotExistException());
-            existingUser.setMyUsername(user.getMyUsername());
-            existingUser.setPhone(user.getPhone());
-            existingUser.setEmail(user.getEmail());
-            existingUser.setRole(user.getRole());
+            existingUser.setMyUsername(updateUserAdminDto.getMyUsername());
+            existingUser.setPhone(updateUserAdminDto.getPhone());
+            existingUser.setEmail(updateUserAdminDto.getEmail());
+            existingUser.setRole(updateUserAdminDto.getRole());
 
             userRepository.save(existingUser);
 

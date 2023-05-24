@@ -56,9 +56,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public AuthenticationResponse login(Map<String, String> requestMap) {
-        String email = requestMap.get("email");
-        String password = requestMap.get("password");
+    public AuthenticationResponse login(AuthenticationRequest request) {
+        String email = request.getEmail();
+        String password = request.getPassword();
         try {
             Authentication auth =  authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(email, password)

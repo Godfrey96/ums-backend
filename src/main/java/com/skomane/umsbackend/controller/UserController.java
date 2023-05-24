@@ -1,10 +1,13 @@
 package com.skomane.umsbackend.controller;
 
+import com.skomane.umsbackend.dto.*;
 import com.skomane.umsbackend.exceptions.UnableToResolvePhotoException;
 import com.skomane.umsbackend.jwt.JwtUtils;
 import com.skomane.umsbackend.model.Role;
 import com.skomane.umsbackend.model.User;
 import com.skomane.umsbackend.service.UserService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -20,6 +23,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/user")
 @CrossOrigin("*")
 @RequiredArgsConstructor
+@Tag(name = "User")
 public class UserController {
 
     private final UserService userService;
@@ -61,9 +65,9 @@ public class UserController {
     }
 
     @PostMapping("/change-password")
-    public ResponseEntity<String> changePassword(@RequestBody Map<String, String> requestMap) {
+    public ResponseEntity<String> changePassword(@RequestBody PasswordChangeDto passwordChangeDto) {
         try {
-            return userService.changePassword(requestMap);
+            return userService.changePassword(passwordChangeDto);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -71,9 +75,9 @@ public class UserController {
     }
 
     @PutMapping("/update-status")
-    public ResponseEntity<String> updateStatus(@RequestBody Map<String, String> requestMap) {
+    public ResponseEntity<String> updateStatus(@RequestBody StatusDto statusDto) {
         try {
-            return userService.updateStatus(requestMap);
+            return userService.updateStatus(statusDto);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,9 +85,9 @@ public class UserController {
     }
 
     @PutMapping("/update-user")
-    public ResponseEntity<String> updateUser(@RequestBody Map<String, String> requestMap) {
+    public ResponseEntity<String> updateUser(@RequestBody UpdateUserDto userDto) {
         try {
-            return userService.updateUser(requestMap);
+            return userService.updateUser(userDto);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -91,8 +95,8 @@ public class UserController {
     }
 
     @PutMapping("/update-user-details")
-    public ResponseEntity<User> updateUserDetailsByAdmin(@RequestBody User user) {
-        return new ResponseEntity<>(userService.updateUserDetailsByAdmin(user), HttpStatus.OK);
+    public ResponseEntity<User> updateUserDetailsByAdmin(@RequestBody UpdateUserAdminDto updateUserAdminDto) {
+        return new ResponseEntity<>(userService.updateUserDetailsByAdmin(updateUserAdminDto), HttpStatus.OK);
     }
 
     @GetMapping("/get/{id}")
@@ -100,14 +104,9 @@ public class UserController {
         return new ResponseEntity<>(userService.getUserById(id), HttpStatus.OK);
     }
 
-    @PostMapping("/pfp")
+    @PostMapping(value = "/upload-image", consumes = {"multipart/form-data"})
     public User uploadProfilePicture(@RequestParam("image") MultipartFile file) throws Exception {
         return userService.setProfileOrBannerPicture(file, "pfp");
-    }
-
-    @PostMapping("/banner")
-    public User uploadBannerPicture(@RequestParam("image")MultipartFile file) throws Exception {
-        return userService.setProfileOrBannerPicture(file, "bnr");
     }
 
     @GetMapping("/total-admins")

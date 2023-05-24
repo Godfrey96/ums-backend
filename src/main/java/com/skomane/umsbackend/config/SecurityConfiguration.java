@@ -27,16 +27,20 @@ public class SecurityConfiguration {
                 http.cors();
                 http.csrf().disable()
                 .authorizeHttpRequests(auth -> {
-                    auth.requestMatchers("/api/v1/auth/**").permitAll();
-                    auth.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll();
                     auth.requestMatchers(
+                            "/api/v1/auth/**",
                             "/v2/api-docs",
-                            "/configuration/ui",
+                            "/v3/api-docs",
+                            "/v3/api-docs/**",
+                            "/swagger-resources",
                             "/swagger-resources/**",
-                            "/configuration/security",
-                            "/swagger-ui.html",
-                            "/webjars/**"
+                            "/configurations/ui",
+                            "/configurations/security",
+                            "/swagger-ui/**",
+                            "/webjars/**",
+                            "/swagger-ui.html"
                     ).permitAll();
+                    auth.requestMatchers(new AntPathRequestMatcher("/h2-console/**")).permitAll();
                     auth.anyRequest().authenticated();
                 });
         http.headers().frameOptions().sameOrigin();

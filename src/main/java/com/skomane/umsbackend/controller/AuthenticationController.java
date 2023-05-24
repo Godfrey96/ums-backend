@@ -1,5 +1,6 @@
 package com.skomane.umsbackend.controller;
 
+import com.skomane.umsbackend.dto.AuthenticationRequest;
 import com.skomane.umsbackend.dto.AuthenticationResponse;
 import com.skomane.umsbackend.dto.RegisterRequest;
 import com.skomane.umsbackend.exceptions.EmailAlreadyTakenException;
@@ -7,6 +8,7 @@ import com.skomane.umsbackend.exceptions.InvalidCredentialsException;
 import com.skomane.umsbackend.exceptions.UsernameAlreadyTakenException;
 import com.skomane.umsbackend.model.User;
 import com.skomane.umsbackend.service.AuthService;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.Map;
 @RequestMapping("/api/v1/auth")
 @CrossOrigin("*")
 @RequiredArgsConstructor
+@Tag(name = "Authentication")
 public class AuthenticationController {
 
     private final AuthService authService;
@@ -49,8 +52,8 @@ public class AuthenticationController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<AuthenticationResponse> login(@RequestBody Map<String, String> requestMap) {
-        return new ResponseEntity<>(authService.login(requestMap), HttpStatus.OK);
+    public ResponseEntity<AuthenticationResponse> login(@RequestBody AuthenticationRequest request) {
+        return new ResponseEntity<>(authService.login(request), HttpStatus.OK);
     }
 
 

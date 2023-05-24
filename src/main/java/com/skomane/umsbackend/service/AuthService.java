@@ -11,6 +11,6 @@ import java.util.Map;
 public interface AuthService {
 
     User register(RegisterRequest request);
-    AuthenticationResponse login(Map<String, String> requestMap);
+    AuthenticationResponse login(AuthenticationRequest request);
     User getUserByEmail(String username);
 }
