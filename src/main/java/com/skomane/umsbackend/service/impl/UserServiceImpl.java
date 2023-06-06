@@ -39,7 +39,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<List<User>> getAllUsers() {
         try {
-            return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.ADMIN)){
+                return new ResponseEntity<>(userRepository.findAll(), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -49,7 +54,12 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<List<User>> getAllUsersOfRoleUser(Role role) {
         try {
-            return new ResponseEntity<>(userRepository.findByRole(role), HttpStatus.OK);
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.USER)) {
+                return new ResponseEntity<>(userRepository.findByRole(role), HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>(new ArrayList<>(), HttpStatus.UNAUTHORIZED);
+            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,13 +91,18 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> updateStatus(StatusDto statusDto) {
         try {
-            Optional<User> optional = userRepository.findById(statusDto.getId());
-            if (!optional.isEmpty()) {
-                optional.get().setStatus(statusDto.getStatus());
-                userRepository.save(optional.get());
-                return new ResponseEntity<>("Status updated successfully", HttpStatus.OK);
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.ADMIN)){
+                Optional<User> optional = userRepository.findById(statusDto.getId());
+                if (!optional.isEmpty()) {
+                    optional.get().setStatus(statusDto.getStatus());
+                    userRepository.save(optional.get());
+                    return new ResponseEntity<>("Status updated successfully", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Failed to update status", HttpStatus.BAD_REQUEST);
+                }
             } else {
-                return new ResponseEntity<>("Failed to update status", HttpStatus.BAD_REQUEST);
+                return new ResponseEntity<>("Unauthorised access", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -117,12 +132,17 @@ public class UserServiceImpl implements UserService {
     @Override
     public ResponseEntity<String> deleteUser(Integer id) {
         try {
-            Optional optional = userRepository.findById(id);
-            if (!optional.isEmpty()) {
-                userRepository.deleteById(id);
-                return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.ADMIN)){
+                Optional optional = userRepository.findById(id);
+                if (!optional.isEmpty()) {
+                    userRepository.deleteById(id);
+                    return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("User id does not exists", HttpStatus.OK);
+                }
             } else {
-                return new ResponseEntity<>("User id does not exists", HttpStatus.OK);
+                return new ResponseEntity<>("Unauthorised access", HttpStatus.UNAUTHORIZED);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -152,16 +172,22 @@ public class UserServiceImpl implements UserService {
     @Override
     public User updateUserDetailsByAdmin(UpdateUserAdminDto updateUserAdminDto) {
         try {
-            User existingUser = userRepository.findByEmail(updateUserAdminDto.getEmail())
-                    .orElseThrow(() -> new UserDoesNotExistException());
-            existingUser.setMyUsername(updateUserAdminDto.getMyUsername());
-            existingUser.setPhone(updateUserAdminDto.getPhone());
-            existingUser.setEmail(updateUserAdminDto.getEmail());
-            existingUser.setRole(updateUserAdminDto.getRole());
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.ADMIN)) {
+                User existingUser = userRepository.findByEmail(updateUserAdminDto.getEmail())
+                        .orElseThrow(() -> new UserDoesNotExistException());
+                existingUser.setMyUsername(updateUserAdminDto.getMyUsername());
+                existingUser.setPhone(updateUserAdminDto.getPhone());
+                existingUser.setEmail(updateUserAdminDto.getEmail());
+                existingUser.setRole(updateUserAdminDto.getRole());
 
-            userRepository.save(existingUser);
+                userRepository.save(existingUser);
 
-            return existingUser;
+                return existingUser;
+            } else {
+                System.out.println("Unauthorized");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -205,7 +231,17 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Integer getAllAdminsCountByAdminRole() {
-        return userRepository.totalAdminByAdminRole();
+        try {
+            var user = userRepository.findByEmail(authenticationFilter.getCurrentUser());
+            if (user.get().getRole().equals(Role.ADMIN)){
+                return userRepository.totalAdminByAdminRole();
+            } else {
+                throw new RuntimeException("Unauthorized Access");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("null");
     }
 
     @Override
