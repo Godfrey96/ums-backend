@@ -1,5 +1,6 @@
 package com.skomane.umsbackend.jwt;
 
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwt;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -25,6 +26,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtUtils jwtUtils;
     private final UserDetailsService userDetailsService;
 
+    Claims claims;
     private String userEmail = null;
 
     @Override
